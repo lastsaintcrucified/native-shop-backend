@@ -3,13 +3,16 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
-const productRoutes = require("./routes/products");
 const api = process.env.API_URL;
 const password = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
 
+
+const productRoutes = require("./routes/products");
+const catagoryRoutes = require("./routes/catagories");
 //middleware
 app.use(bodyParser.json());
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -20,6 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(`${api}/products`,productRoutes);
+app.use(`${api}/catagories`,catagoryRoutes);
 mongoose.connect(
   `mongodb+srv://towhid313:${password}@cluster0.sspie.mongodb.net/${dbName}?retryWrites=true&w=majority`,
   {
