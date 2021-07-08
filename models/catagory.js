@@ -8,4 +8,12 @@ const catagorySchema = new Schema({
   color: { type: String },
 });
 
+catagorySchema.set("toJSON", {
+  versionKey: false,
+  transform: function (doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+  },
+});
+
 module.exports = mongoose.model("Catagory", catagorySchema);

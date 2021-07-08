@@ -1,5 +1,6 @@
 const httpError = require("../models/httpError");
 const Catagory = require("../models/catagory");
+const mongoose = require("mongoose");
 
 const getCatagory = async (req,res,next) =>{
     let catagoryList;
@@ -18,6 +19,10 @@ const getCatagory = async (req,res,next) =>{
 
 const getCatagoryById = async(req,res,next) =>{
     const catId = req.params.id;
+    if(!mongoose.isValidObjectId(catId)){
+        const error = new httpError("Invalid ID!", 404);
+      return next(error);
+    }
     let catagory;
     try{
         catagory = await Catagory.findById(catId);
@@ -51,6 +56,10 @@ const createCatagory = async (req,res,next) => {
 
 const updateCatagory = async (req,res,next) =>{
     const catId = req.params.id;
+    if(!mongoose.isValidObjectId(catId)){
+        const error = new httpError("Invalid ID!", 404);
+      return next(error);
+    }
     const {name,icon,color} = req.body;
     const updatedCatagory = {
         name,
@@ -69,6 +78,10 @@ const updateCatagory = async (req,res,next) =>{
 
 const deleteCatagory = async (req,res,next) =>{
     const catId = req.params.id;
+    if(!mongoose.isValidObjectId(catId)){
+        const error = new httpError("Invalid ID!", 404);
+      return next(error);
+    }
     let deletedCatagory;
     try{
         deletedCatagory = await Catagory.findByIdAndRemove(catId);
@@ -84,8 +97,11 @@ const deleteCatagory = async (req,res,next) =>{
     res.status(200).json({message:"Catagory deleted!"});
 }
 
+
+
 exports.getCatagory = getCatagory;
 exports.createCatagory = createCatagory;
 exports.deleteCatagory = deleteCatagory;
 exports.getCatagoryById = getCatagoryById;
 exports.updateCatagory = updateCatagory;
+
