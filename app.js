@@ -10,6 +10,7 @@ const dbName = process.env.DB_NAME;
 
 const productRoutes = require("./routes/products");
 const catagoryRoutes = require("./routes/catagories");
+const userRoutes = require("./routes/users");
 //middleware
 app.use(bodyParser.json());
 
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 });
 app.use(`${api}/products`,productRoutes);
 app.use(`${api}/catagories`,catagoryRoutes);
+app.use(`${api}/users`,userRoutes);
 mongoose.connect(
   `mongodb+srv://towhid313:${password}@cluster0.sspie.mongodb.net/${dbName}?retryWrites=true&w=majority`,
   {
