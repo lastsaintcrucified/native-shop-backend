@@ -43,7 +43,7 @@ const createUser = async (req, res, next) => {
   const {
     name,
     email,
-    passwordHash,
+    password,
     phone,
     isAdmin,
     street,
@@ -67,7 +67,7 @@ const createUser = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    passwordHash: bcrypt.hashSync(passwordHash, 13),
+    passwordHash: bcrypt.hashSync(password, 13),
     phone,
     isAdmin,
     street,
@@ -120,7 +120,40 @@ const loginUser = async (req, res, next) => {
   }
 };
 
+
+const getCount = async (req, res, next) => {
+    let countUser;
+    try {
+        countUser = await User.countDocuments((count) => count);
+    } catch (err) {
+      const error = new httpError("Something went wrong!", 500);
+      return next(error);
+    }
+    if (!countUser) {
+      const error = new httpError("No user!", 404);
+      return next(error);
+    }
+    res.send({ count: countUser });
+  };
+  
+  const deleteUser = async (req, res, next) => {
+    const userId = req.params.id;
+    if (!mongoose.isValidObjectId(userId)) {
+      const error = new httpError("Invalid ID!", 404);
+      return next(error);
+    }
+    try {
+      await User.findByIdAndRemove(userId);
+    } catch (err) {
+      const error = new httpError("Something Went Wrong!", 500);
+      return next(error);
+    }
+    res.status(200).json({ message: "Deleted successfully!!" });
+  };
+
 exports.getUser = getUser;
 exports.getUserById = getUserById;
 exports.createUser = createUser;
 exports.loginUser = loginUser;
+exports.getCount = getCount;
+exports.deleteUser = deleteUser;
