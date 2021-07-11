@@ -11,6 +11,7 @@ const authCheck = require("./helpers/auth-check");
 const productRoutes = require("./routes/products");
 const catagoryRoutes = require("./routes/catagories");
 const userRoutes = require("./routes/users");
+const ordersRoutes = require("./routes/orders");
 //middleware
 app.use(bodyParser.json());
 
@@ -28,6 +29,7 @@ app.use(authCheck());
 app.use(`${api}/products`, productRoutes);
 app.use(`${api}/catagories`, catagoryRoutes);
 app.use(`${api}/users`, userRoutes);
+app.use(`${api}/orders`, ordersRoutes);
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
