@@ -8,7 +8,7 @@ const productSchema = new Schema({
   richDescription: { type: String, default: "" },
   image: { type: String, default: "" },
   images: [{ type: String }],
-  countInStock: { type: Number, required: true, min: 0, max: 255 },
+  countInStock: { type: Number, required: true, min: 0, max: 600 },
   brand: { type: String, default: "" },
   price: { type: Number, default: 0 },
   catagory: {

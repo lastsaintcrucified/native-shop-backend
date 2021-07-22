@@ -10,6 +10,7 @@ router.get("/get/featured/:count",productController.getFeatured);
 router.get("/get/featured",productController.getFeatured);
 router.post("/",imageUpload.single("image"),productController.createProduct);
 router.put("/:id",productController.updateProduct);
+router.put("/gallery-images/:id",imageUpload.array("images"),productController.updateGallery);
 router.delete("/:id",productController.deleteProduct);
 
 module.exports = router;

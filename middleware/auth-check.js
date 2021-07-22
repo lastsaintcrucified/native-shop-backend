@@ -10,6 +10,7 @@ const authCheck = () =>{
         isRevoked: isRevoked
     }).unless({
         path:[
+            {url:/public\/images(.*)/,methods:["GET","OPTIONS"]},
             {url:/api\/products(.*)/,methods:["GET","OPTIONS"]},
             {url:/api\/catagories(.*)/,methods:["GET","OPTIONS"]},
             `${api}/users/login`,

@@ -26,6 +26,7 @@ app.use((req, res, next) => {
 });
 app.use(authCheck());
 //routes
+app.use("/public/images",express.static(__dirname+"/public/images"));
 app.use(`${api}/products`, productRoutes);
 app.use(`${api}/catagories`, catagoryRoutes);
 app.use(`${api}/users`, userRoutes);

@@ -60,6 +60,10 @@ const createProduct = async (req, res, next) => {
     const error = new httpError("Something Went Wrong!", 500);
     return next(error);
   }
+  if(!req.file){
+    const error = new httpError("No file was chosen!", 500);
+    return next(error);
+  }
   const {
     name,
     description,
@@ -87,6 +91,7 @@ const createProduct = async (req, res, next) => {
     catagory,
   });
   let product;
+  
   try {
     product = await createdProduct.save();
   } catch (err) {
@@ -101,7 +106,7 @@ const createProduct = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
-  if (!mongoose.isValidObjectId(req.body.catagory)) {
+  if (!mongoose.isValidObjectId(req.body.catagory) && !mongoose.isValidObjectId(req.params.id)) {
     const error = new httpError("Invalid ID!", 404);
     return next(error);
   }
@@ -142,6 +147,41 @@ const updateProduct = async (req, res, next) => {
     numReviews,
     rating,
     catagory,
+  };
+  try {
+    product = await Product.findByIdAndUpdate(productId, updatedProduct, {
+      new: true,
+    });
+  } catch (err) {
+    const error = new httpError("Something Went Wrong!", 500);
+    return next(error);
+  }
+
+  if (!product) {
+    const error = new httpError("No product found!", 404);
+    return next(error);
+  }
+
+  res.status(200).json({ product });
+};
+
+const updateGallery = async (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    const error = new httpError("Invalid ID!", 404);
+    return next(error);
+  }
+  
+  let product;
+  const productId = req.params.id;
+  const files = req.files;
+  let imagePaths = [];
+  if(files){
+    files.map(file => {
+      imagePaths.push(file.path)
+    })
+  }
+  const updatedProduct = {
+    images:imagePaths
   };
   try {
     product = await Product.findByIdAndUpdate(productId, updatedProduct, {
@@ -213,3 +253,4 @@ exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
 exports.getCount = getCount;
 exports.getFeatured = getFeatured;
+exports.updateGallery = updateGallery;
