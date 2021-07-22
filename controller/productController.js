@@ -1,6 +1,7 @@
 const httpError = require("../models/httpError");
 const Product = require("../models/product");
 const Catagory = require("../models/catagory");
+const fs = require("fs");
 const mongoose = require("mongoose");
 
 const getProduct = async (req, res, next) => {
@@ -65,20 +66,20 @@ const createProduct = async (req, res, next) => {
     richDescription,
     brand,
     price,
-    image,
     countInStock,
     isFeatured,
     numReviews,
     rating,
     catagory,
   } = req.body;
+  
   const createdProduct = new Product({
     name,
     description,
     richDescription,
     brand,
     price,
-    image,
+    image:req.file.path,
     countInStock,
     isFeatured,
     numReviews,
@@ -90,6 +91,9 @@ const createProduct = async (req, res, next) => {
     product = await createdProduct.save();
   } catch (err) {
     const error = new httpError("Product cannot be created!", 500);
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    })
     return next(error);
   }
 

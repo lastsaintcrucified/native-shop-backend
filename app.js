@@ -6,7 +6,7 @@ const app = express();
 const api = process.env.API_URL;
 const password = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
-const authCheck = require("./helpers/auth-check");
+const authCheck = require("./middleware/auth-check");
 
 const productRoutes = require("./routes/products");
 const catagoryRoutes = require("./routes/catagories");
