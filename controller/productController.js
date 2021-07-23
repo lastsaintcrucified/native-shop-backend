@@ -76,14 +76,15 @@ const createProduct = async (req, res, next) => {
     rating,
     catagory,
   } = req.body;
-  
+  const fileName = req.file.filename;
+  const basePath = `${req.protocol}://${req.get('host')}/public/images/`;
   const createdProduct = new Product({
     name,
     description,
     richDescription,
     brand,
     price,
-    image:req.file.path,
+    image:`${basePath}${fileName}`, //http://localhost:300/public/images/image-3123
     countInStock,
     isFeatured,
     numReviews,
@@ -175,9 +176,10 @@ const updateGallery = async (req, res, next) => {
   const productId = req.params.id;
   const files = req.files;
   let imagePaths = [];
+  const basePath = `${req.protocol}://${req.get('host')}/public/images/`;
   if(files){
     files.map(file => {
-      imagePaths.push(file.path)
+      imagePaths.push(`${basePath}${file.filename}`)
     })
   }
   const updatedProduct = {
